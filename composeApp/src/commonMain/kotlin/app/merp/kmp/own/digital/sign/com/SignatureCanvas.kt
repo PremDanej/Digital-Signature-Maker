@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -37,6 +38,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import app.merp.kmp.own.digital.sign.com.saver.imageBitmapSaver
 import kotlinx.coroutines.CoroutineScope
@@ -93,9 +95,16 @@ fun SignatureCanvas() {
                 Box(
                     modifier = Modifier
                         .size(40.dp)
+                        .clip(CircleShape)
                         .background(color, shape = CircleShape)
-                        .clickable {
-                            brushColor = color   // Set selected color on click
+                        .selectable(
+                            selected = brushColor == color,
+                            role = Role.RadioButton,
+                            onClick = { brushColor = color }
+                        ).let {
+                            if (brushColor == color) {
+                                it.border(width = 1.5.dp, Color.DarkGray, shape = CircleShape)
+                            } else it
                         }
                 )
             }
